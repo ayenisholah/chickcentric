@@ -16,12 +16,13 @@ export default class AddProducts extends Component {
   state = {
     selectedFile: null,
     title: "",
-    price: "",
+    price: 0,
     imageUrl: "",
     description: "",
     inCart: false,
     count: 0,
     total: 0,
+    isValid: false,
   };
 
   fileChangedHandler = (event) => {
@@ -32,42 +33,28 @@ export default class AddProducts extends Component {
     event.preventDefault();
     const { selectedFile } = this.state;
 
-    try {
-      toast.info("🦄 Uploading image...", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      const promises = [];
-      const blockBlobClient = containerClient.getBlockBlobClient(
-        selectedFile.name
-      );
-      promises.push(blockBlobClient.uploadBrowserData(selectedFile));
-      await Promise.all(promises);
-      toast.success("✅ Upload Successful", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      alert("Upload Successful");
-    } catch (error) {
-      toast.error(`🚫 Something Went Wrong: ${error.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+
+    if (!allowedExtensions.exec(selectedFile.name)) {
+      toast.error("🚫 Invalid file type");
+      this.setState({ isValid: false });
+    } else {
+      this.setState({ isValid: true });
+    }
+
+    if (this.state.isValid === true) {
+      try {
+        toast.info("🦄 Uploading image...");
+        const promises = [];
+        const blockBlobClient = containerClient.getBlockBlobClient(
+          selectedFile.name
+        );
+        promises.push(blockBlobClient.uploadBrowserData(selectedFile));
+        await Promise.all(promises);
+        toast.success("✅ Upload Successful");
+      } catch (error) {
+        toast.error(`🚫 Something Went Wrong: ${error.message}`);
+      }
     }
   };
 
@@ -79,37 +66,81 @@ export default class AddProducts extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      loading: true,
-    });
 
-    const {
-      selectedFile,
-      title,
-      description,
-      price,
-      inCart,
-      count,
-      total,
-    } = this.state;
+    try {
+      const {
+        selectedFile,
+        title,
+        description,
+        price,
+        inCart,
+        count,
+        total,
+      } = this.state;
 
-    const product = {
-      imageUrl: `https://thechickcentric.blob.core.windows.net/products/${selectedFile.name}`,
-      title,
-      description,
-      price,
-      count,
-      total,
-      inCart,
-    };
+      if (selectedFile === null) {
+        toast.error("Cannot add a product without an image");
+        this.setState({ isValid: false });
+      }
 
-    console.log(product);
+      if (title.length === 0) {
+        toast.error("Product Title Cannot be empty");
+        this.setState({ isValid: false });
+      }
+
+      if (description.length === 0) {
+        toast.error("Product description cannot be empty");
+        this.setState({ isValid: false });
+      }
+
+      if (!Number.isInteger(+price) || price === 0 || price < 0) {
+        toast.error("Product price must be a valid number");
+        this.setState({ isValid: false });
+      }
+
+      const product = {
+        imageUrl: `https://thechickcentric.blob.core.windows.net/products/${selectedFile.name}`,
+        title,
+        description,
+        price,
+        count,
+        total,
+        inCart,
+      };
+
+      if (
+        selectedFile !== null &&
+        title.length !== 0 &&
+        description.length !== 0 &&
+        Number.isInteger(+price)
+      ) {
+        this.setState({ isValid: true });
+        toast.success("Yay!!!");
+        console.log(product);
+        // Post product to database
+      } else {
+        toast.error("Please fill the appropirate field");
+      }
+
+      this.setState({
+        selectedFile: null,
+        title: "",
+        price: "",
+        imageUrl: "",
+        description: "",
+        inCart: false,
+        count: 0,
+        total: 0,
+      });
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   render() {
     const { title, description, price } = this.state;
     return (
-      <div>
+      <div className="addProduct">
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -121,34 +152,43 @@ export default class AddProducts extends Component {
           draggable
           pauseOnHover
         />
+        <h3>Add A Product</h3>
         <form>
-          <div className="upload">
+          <label>Upload Product Image</label>
+          <div className="file">
             <input type="file" onChange={this.fileChangedHandler} />
             <button onClick={this.uploadHandler}>Upload!</button>
           </div>
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            onChange={this.handleChange}
-            value={title}
-          />
 
-          <label>Price</label>
-          <input
-            type="text"
-            name="price"
-            onChange={this.handleChange}
-            value={price}
-          />
+          <div className="form-field">
+            <label>Title</label>
+            <input
+              type="text"
+              name="title"
+              onChange={this.handleChange}
+              value={title}
+            />
+          </div>
 
-          <label>Description</label>
-          <input
-            type="text"
-            name="description"
-            onChange={this.handleChange}
-            value={description}
-          />
+          <div className="form-field">
+            <label>Price</label>
+            <input
+              type="text"
+              name="price"
+              onChange={this.handleChange}
+              value={price}
+            />
+          </div>
+
+          <div className="form-field">
+            <label>Description</label>
+            <input
+              type="text"
+              name="description"
+              onChange={this.handleChange}
+              value={description}
+            />
+          </div>
 
           <button onClick={this.handleSubmit}>Submit</button>
         </form>
