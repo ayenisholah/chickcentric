@@ -4,7 +4,7 @@ import controllers from './product.controllers'
 const router = Router()
 
 // /api/product
-router.route('/').get(controllers.getOne).post(controllers.createOne)
+router.route('/').get(controllers.getMany).post(controllers.createOne)
 
 // /api/product/:id
 router
