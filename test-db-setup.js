@@ -1,14 +1,14 @@
 import mongoose from 'mongoose'
 import cuid from 'cuid'
 import _ from 'lodash'
-// import { User } from './src/resources/user/user.model'
-
-// const models = { User, List, Item };
+import { User } from './src/resources/user/user.model'
+import { Product } from './src/resources/product/product.model'
+const models = { User, Product }
 
 const url =
-  process.env.MONGODB_URI ||
+  process.env.COSMOSDB_URI ||
   process.env.DB_URL ||
-  'mongodb://localhost:27017/chickcentric-devapi-testing'
+  'mongodb://localhost:27017/chickcentric-test'
 
 global.newId = () => {
   return mongoose.Types.ObjectId()
