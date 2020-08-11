@@ -26,6 +26,7 @@ export const signup = async (req, res) => {
     const token = newToken(user)
     return res.status(201).send({ token })
   } catch (e) {
+    console.error(e)
     return res.status(500).end()
   }
 }
@@ -53,7 +54,7 @@ export const signin = async (req, res) => {
     }
 
     const token = newToken(user)
-    return res.status(201).send({ token })
+    return res.status(200).send({ token })
   } catch (e) {
     console.error(e)
     res.status(500).end()
