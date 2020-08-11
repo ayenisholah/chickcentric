@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -33,6 +34,11 @@ export default class AddProducts extends Component {
     event.preventDefault();
     const { selectedFile } = this.state;
 
+    if (selectedFile === null) {
+      toast.error("Can not add a product without an image");
+      return;
+    }
+
     const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
     if (!allowedExtensions.exec(selectedFile.name)) {
@@ -42,19 +48,17 @@ export default class AddProducts extends Component {
       this.setState({ isValid: true });
     }
 
-    if (this.state.isValid === true) {
-      try {
-        toast.info("🦄 Uploading image...");
-        const promises = [];
-        const blockBlobClient = containerClient.getBlockBlobClient(
-          selectedFile.name
-        );
-        promises.push(blockBlobClient.uploadBrowserData(selectedFile));
-        await Promise.all(promises);
-        toast.success("✅ Upload Successful");
-      } catch (error) {
-        toast.error(`🚫 Something Went Wrong: ${error.message}`);
-      }
+    try {
+      toast.info("🦄 Uploading image...");
+      const promises = [];
+      const blockBlobClient = containerClient.getBlockBlobClient(
+        selectedFile.name
+      );
+      promises.push(blockBlobClient.uploadBrowserData(selectedFile));
+      await Promise.all(promises);
+      toast.success("✅ Upload Successful");
+    } catch (error) {
+      toast.error(`🚫 Something Went Wrong: ${error.message}`);
     }
   };
 
@@ -118,6 +122,13 @@ export default class AddProducts extends Component {
         toast.success("Yay!!!");
         console.log(product);
         // Post product to database
+
+        axios.post("http://localhost:3000/api/product", product, {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMzBmNzhiYjFjNDhhNWJiNmM0NTAyZSIsImlhdCI6MTU5NzA0NDYzMSwiZXhwIjoxNjA1Njg0NjMxfQ.Hal9SP_QuEn_J3Y1LZ-rIdbwiIRx9V2JQsTZzqWm7Q0",
+          },
+        });
       } else {
         toast.error("Please fill the appropirate field");
       }
