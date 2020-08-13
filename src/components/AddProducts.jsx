@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Login from "./authentication/Login";
 
 const { BlobServiceClient } = require("@azure/storage-blob");
 const blobSasUrl =
@@ -13,6 +14,9 @@ const containerName = "products";
 
 const containerClient = blobServiceClient.getContainerClient(containerName);
 
+const KEY = "user-token";
+const token = localStorage.getItem(KEY);
+
 export default class AddProducts extends Component {
   state = {
     selectedFile: null,
@@ -23,7 +27,7 @@ export default class AddProducts extends Component {
     inCart: false,
     count: 0,
     total: 0,
-    isValid: false,
+    loggenIn: false,
   };
 
   fileChangedHandler = (event) => {
@@ -39,24 +43,22 @@ export default class AddProducts extends Component {
       return;
     }
 
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-
-    if (!allowedExtensions.exec(selectedFile.name)) {
-      toast.error("🚫 Invalid file type");
-      this.setState({ isValid: false });
-    } else {
-      this.setState({ isValid: true });
-    }
-
     try {
-      toast.info("🦄 Uploading image...");
-      const promises = [];
-      const blockBlobClient = containerClient.getBlockBlobClient(
-        selectedFile.name
-      );
-      promises.push(blockBlobClient.uploadBrowserData(selectedFile));
-      await Promise.all(promises);
-      toast.success("✅ Upload Successful");
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+
+      if (!allowedExtensions.exec(selectedFile.name)) {
+        toast.error("🚫 Invalid file type");
+        this.setState({ selectedFile: null });
+      } else {
+        toast.info("🦄 Uploading image...");
+        const promises = [];
+        const blockBlobClient = containerClient.getBlockBlobClient(
+          selectedFile.name
+        );
+        promises.push(blockBlobClient.uploadBrowserData(selectedFile));
+        await Promise.all(promises);
+        toast.success("✅ Upload Successful");
+      }
     } catch (error) {
       toast.error(`🚫 Something Went Wrong: ${error.message}`);
     }
@@ -68,7 +70,7 @@ export default class AddProducts extends Component {
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -84,29 +86,29 @@ export default class AddProducts extends Component {
 
       if (selectedFile === null) {
         toast.error("Cannot add a product without an image");
-        this.setState({ isValid: false });
+        return;
       }
 
       if (title.length === 0) {
         toast.error("Product Title Cannot be empty");
-        this.setState({ isValid: false });
-      }
-
-      if (description.length === 0) {
-        toast.error("Product description cannot be empty");
-        this.setState({ isValid: false });
+        return;
       }
 
       if (!Number.isInteger(+price) || price === 0 || price < 0) {
         toast.error("Product price must be a valid number");
-        this.setState({ isValid: false });
+        return;
+      }
+
+      if (description.length === 0) {
+        toast.error("Product description cannot be empty");
+        return;
       }
 
       const product = {
         imageUrl: `https://thechickcentric.blob.core.windows.net/products/${selectedFile.name}`,
         title,
         description,
-        price,
+        price: Number(price),
         count,
         total,
         inCart,
@@ -118,17 +120,21 @@ export default class AddProducts extends Component {
         description.length !== 0 &&
         Number.isInteger(+price)
       ) {
-        this.setState({ isValid: true });
-        toast.success("Yay!!!");
-        console.log(product);
-        // Post product to database
+        const response = await axios.post(
+          "https://lit-sands-58479.herokuapp.com/api/product",
+          product,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        axios.post("http://localhost:3000/api/product", product, {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMzBmNzhiYjFjNDhhNWJiNmM0NTAyZSIsImlhdCI6MTU5NzA0NDYzMSwiZXhwIjoxNjA1Njg0NjMxfQ.Hal9SP_QuEn_J3Y1LZ-rIdbwiIRx9V2JQsTZzqWm7Q0",
-          },
-        });
+        if (response.status === 201) {
+          toast.success("Product successfully added to catalog!!!");
+        } else {
+          toast.error("could not add product to the catalog");
+        }
       } else {
         toast.error("Please fill the appropirate field");
       }
@@ -136,7 +142,7 @@ export default class AddProducts extends Component {
       this.setState({
         selectedFile: null,
         title: "",
-        price: "",
+        price: 0,
         imageUrl: "",
         description: "",
         inCart: false,
@@ -150,19 +156,13 @@ export default class AddProducts extends Component {
 
   render() {
     const { title, description, price } = this.state;
+
+    if (token === null) {
+      return <Login />;
+    }
+
     return (
       <div className="addProduct">
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
         <h3>Add A Product</h3>
         <form>
           <label>Upload Product Image</label>
@@ -184,7 +184,7 @@ export default class AddProducts extends Component {
           <div className="form-field">
             <label>Price</label>
             <input
-              type="text"
+              type="number"
               name="price"
               onChange={this.handleChange}
               value={price}
@@ -203,6 +203,17 @@ export default class AddProducts extends Component {
 
           <button onClick={this.handleSubmit}>Submit</button>
         </form>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     );
   }
