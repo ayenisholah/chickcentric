@@ -163,7 +163,6 @@ export default class AddProducts extends Component {
 
     return (
       <div className="addProduct">
-        <h3>Add A Product</h3>
         <form>
           <label>Upload Product Image</label>
           <div className="file">
