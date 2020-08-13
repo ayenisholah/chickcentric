@@ -1,0 +1,104 @@
+.App {
+  height: 100vh;
+}
+
+.navbar {
+  box-sizing: border-box;
+  border-bottom: 1px solid #e1e4e8;
+  width: 100%;
+  padding: 40px 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0px;
+  z-index: 6;
+  background-color: #404040;
+  max-height: 80px;
+}
+
+nav + .landing {
+  margin-top: 100px;
+}
+
+.burger {
+  display: none;
+}
+
+@media screen and (max-width: 1200px) {
+  .navbar {
+    padding: 20px 100px;
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .navbar {
+    padding: 20px 80px;
+    .info {
+      width: 50%;
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .navbar {
+    padding: 20px 60px;
+
+    .info {
+      width: 55%;
+    }
+  }
+}
+
+@media screen and (max-width: 940px) {
+  .navbar {
+    padding: 20px 60px;
+
+    .info {
+      width: 60%;
+    }
+  }
+}
+
+@media screen and (max-width: 860px) {
+  .navbar {
+    padding: 20px 40px;
+
+    .info {
+      width: 65%;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    .info {
+      width: 100%;
+    }
+  }
+}
+
+h3 {
+  color: #ffffff;
+}
+
+// Landing
+
+.landing {
+  padding: 1.875rem 0;
+  .hero {
+    margin: 0 auto;
+    width: 90%;
+    h1 {
+      font-size: 3.125rem;
+      text-align: center;
+    }
+    p {
+      max-width: 680px;
+      text-align: center;
+      margin: 0 auto 0.9375rem;
+      font-size: 1.125rem;
+      line-height: 1.8rem;
+    }
+  }
+}
