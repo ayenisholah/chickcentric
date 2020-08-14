@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Login from "./authentication/Login";
 
 const { BlobServiceClient } = require("@azure/storage-blob");
 const blobSasUrl =
