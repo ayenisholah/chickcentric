@@ -11,7 +11,6 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Login} />
-        {/* <Route path="/login" component={Login} /> */}
         <Route path="/dashboard" component={AddProducts} />
       </Switch>
     </div>
