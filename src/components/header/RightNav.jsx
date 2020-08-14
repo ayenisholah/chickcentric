@@ -14,7 +14,7 @@ const UL = styled.ul`
     font-weight: 500;
     letter-spacing: -0.08px;
     line-height: 20.0167px;
-    color: #ffffff;
+    color: #404040;
     cursor: pointer;
   }
 
