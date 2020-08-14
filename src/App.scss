@@ -1,3 +1,39 @@
+:root {
+  --mainBlue: #2a2a72;
+  --lightBlue: #009ffd;
+  --mainWhite: #f3f3f3;
+  --mainDark: #232528;
+  --mainDark: #000;
+  --mainYellow: #ffa400;
+  --mainPurple: #6a4c93;
+}
+.text-title {
+  font-family: "Roboto", sans-serif;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+}
+.text-blue {
+  color: var(--mainPurple);
+  font-size: 1rem;
+  font-weight: bold;
+}
+.text-bright {
+  color: var(--lightBlue);
+}
+
+.btn-black {
+  background: transparent;
+  text-transform: capitalize;
+  font-size: 0.8rem !important;
+  color: var(--mainBlack);
+  border-radius: 0 !important;
+  border: 0.1rem solid var(--mainDark) !important;
+}
+.btn-black:hover {
+  background: var(--mainDark) !important;
+  color: var(--mainWhite) !important;
+}
+
 .App {
   height: 100vh;
 }
@@ -6,18 +42,50 @@
   box-sizing: border-box;
   border-bottom: 1px solid #e1e4e8;
   width: 100%;
-  padding: 40px 120px;
+  padding: 20px 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   top: 0px;
   z-index: 6;
-  background-color: #404040;
-  max-height: 80px;
+  background-color: #ffffff;
+  max-height: 100px;
+
+  .logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 12%;
+    a > h3 {
+      margin: 0px;
+      color: #404040;
+      font-size: 1.2rem;
+    }
+    a > img {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .cart-icon {
+    cursor: pointer;
+    a > i {
+      font-size: 2rem;
+      color: var(--mainPurple);
+    }
+  }
 }
 
 nav + .landing {
+  margin-top: 100px;
+}
+
+nav + .cart {
+  margin-top: 120px;
+}
+
+nav + .contact {
   margin-top: 100px;
 }
 
@@ -34,46 +102,54 @@ nav + .landing {
 @media screen and (max-width: 1080px) {
   .navbar {
     padding: 20px 80px;
-    .info {
-      width: 50%;
-    }
   }
 }
 
 @media screen and (max-width: 1000px) {
   .navbar {
     padding: 20px 60px;
-
-    .info {
-      width: 55%;
-    }
   }
 }
 
 @media screen and (max-width: 940px) {
   .navbar {
     padding: 20px 60px;
-
-    .info {
-      width: 60%;
-    }
   }
 }
 
 @media screen and (max-width: 860px) {
   .navbar {
     padding: 20px 40px;
-
-    .info {
-      width: 65%;
-    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .navbar {
-    .info {
-      width: 100%;
+    .logo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 20%;
+    }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .navbar {
+    .logo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 45%;
+      a > h3 {
+        margin: 0px;
+        color: #404040;
+        font-size: 1.2rem;
+      }
+      a > img {
+        width: 60px;
+        height: 60px;
+      }
     }
   }
 }
@@ -90,15 +166,105 @@ h3 {
     margin: 0 auto;
     width: 90%;
     h1 {
+      margin: 15px 0;
       font-size: 3.125rem;
       text-align: center;
+      letter-spacing: 0.00625rem;
+      line-height: 3.75rem;
     }
     p {
-      max-width: 680px;
+      max-width: 620px;
       text-align: center;
       margin: 0 auto 0.9375rem;
       font-size: 1.125rem;
       line-height: 1.8rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .landing {
+    .hero {
+      h1 {
+        line-height: 4.0625rem;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.8rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .landing {
+    .hero {
+      h1 {
+        font-size: 2.25rem;
+        letter-spacing: 0.00625rem;
+        line-height: 2.7rem;
+      }
+
+      p {
+        line-height: 1.6rem;
+      }
+    }
+  }
+}
+
+// Footer
+
+.contact {
+  background-color: #eceefe;
+  margin: 20px auto 0;
+  text-align: center;
+  padding: 20px 60px;
+
+  h3 {
+    color: #404040;
+    font-size: 2rem;
+    margin: 15px 0;
+  }
+
+  .contact-details {
+    text-align: left;
+  }
+
+  .cw {
+    font-size: 0.75rem;
+  }
+  .social-links {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    max-width: 500px;
+    margin: 20px auto;
+
+    a > img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .contact {
+    text-align: center;
+    padding: 20px 30px;
+
+    .social-links {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    p {
+      line-height: 1.6rem;
+      font-size: 1rem;
     }
   }
 }
