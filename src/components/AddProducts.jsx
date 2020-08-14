@@ -159,7 +159,7 @@ export default class AddProducts extends Component {
     const { title, description, price } = this.state;
 
     if (token === null) {
-      return <Redirect to="/login" />;
+      return <Redirect to="/" />;
     }
 
     return (
