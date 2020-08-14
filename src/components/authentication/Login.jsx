@@ -1,8 +1,12 @@
 import React, { PureComponent } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const KEY = "user-token";
+const token = localStorage.getItem(KEY);
 
 class Login extends PureComponent {
   state = {
@@ -58,6 +62,10 @@ class Login extends PureComponent {
   };
   render() {
     const { email, password } = this.state;
+
+    if (token !== null) {
+      return <Redirect to="/dasboard" />;
+    }
     return (
       <div className="addProduct">
         <ToastContainer
