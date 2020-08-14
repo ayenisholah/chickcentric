@@ -1,13 +1,21 @@
 import React from "react";
-import Burger from "./Burger";
+import { Link } from "react-router-dom";
+import logo from "../assets/thechickcentric2.png";
 
 export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <h3>The Chick Centric</h3>
+        <Link to="/">
+          <img src={logo} alt="The Chick Centric" />
+        </Link>
+        <Link to="/">
+          <h3>Home</h3>
+        </Link>
       </div>
-      <Burger />
+      <div className="cart-icon">
+        <Link to="/cart"><i className="fas fa-cart-plus" /></Link>
+      </div>
     </nav>
   );
 }
