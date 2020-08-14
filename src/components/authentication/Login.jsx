@@ -64,7 +64,7 @@ class Login extends PureComponent {
     const { email, password } = this.state;
 
     if (token !== null) {
-      return <Redirect to="/dasboard" />;
+      return <Redirect to="/dashboard" />;
     }
     return (
       <div className="addProduct">
