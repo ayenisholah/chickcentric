@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 import Cart from "./components/Cart/Cart";
 import Details from "./components/Details";
+import Default from "./components/Default";
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
           <Route exact path="/" component={Landing} />
           <Route path="/details" component={Details} />
           <Route path="/cart" component={Cart} />
+          <Route component={Default} />
         </Switch>
         <Footer />
       </div>
