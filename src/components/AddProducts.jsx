@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -158,7 +159,7 @@ export default class AddProducts extends Component {
     const { title, description, price } = this.state;
 
     if (token === null) {
-      return <Login />;
+      return <Redirect to="/login" />;
     }
 
     return (
