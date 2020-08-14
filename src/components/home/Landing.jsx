@@ -1,4 +1,5 @@
 import React from "react";
+import ProductList from "../ProductList";
 
 function Landing() {
   return (
@@ -11,6 +12,7 @@ function Landing() {
           our story and meet the people that make our brand what it is.
         </p>
       </section>
+      <ProductList />
     </div>
   );
 }
