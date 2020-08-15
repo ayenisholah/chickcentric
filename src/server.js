@@ -1,4 +1,5 @@
 import express from 'express'
+import * as Sentry from '@sentry/node'
 import { json, urlencoded } from 'body-parser'
 import morgan from 'morgan'
 import cors from 'cors'
@@ -8,6 +9,11 @@ import { connect } from './utils/db'
 import { getManyRouter, router } from './resources/product/product.router'
 
 export const app = express()
+
+Sentry.init({
+  dsn:
+    'https://b13b038bd62b4136ae0bcc5649dc1064@o434421.ingest.sentry.io/5391464',
+})
 
 app.disable('x-powered-by')
 

@@ -1,6 +1,7 @@
 import config from '../config'
 import { User } from '../resources/user/user.model'
 import jwt from 'jsonwebtoken'
+import * as Sentry from '@sentry/node'
 
 export const newToken = (user) => {
   return jwt.sign({ id: user.id }, config.secrets.jwt, {
@@ -27,6 +28,7 @@ export const signup = async (req, res) => {
     return res.status(201).send({ token })
   } catch (e) {
     console.error(e)
+    Sentry.captureException(e)
     return res.status(500).end()
   }
 }
@@ -44,19 +46,23 @@ export const signin = async (req, res) => {
       .exec()
 
     if (!user) {
+      Sentry.captureException('User not found')
+
       return res.status(401).send(invalid)
     }
 
     const match = await user.checkPassword(req.body.password)
 
     if (!match) {
+      console.error(req.body)
+      Sentry.captureException('Invalid email and passoword combination')
       return res.status(401).send(invalid)
     }
 
     const token = newToken(user)
     return res.status(200).send({ token })
   } catch (e) {
-    console.error(e)
+    Sentry.captureException(e)
     res.status(500).end()
   }
 }
