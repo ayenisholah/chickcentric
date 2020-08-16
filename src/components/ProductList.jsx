@@ -33,8 +33,6 @@ export default class ProductList extends Component {
     this.setState(() => {
       return { products };
     }, this.checkCartItems);
-
-    console.log("products", products);
   };
 
   render() {
@@ -46,7 +44,6 @@ export default class ProductList extends Component {
             <div className="row">
               <ProductConsumer>
                 {(value) => {
-                  console.log(value.products);
                   return value.products.map((product) => {
                     return <Product key={product._id} product={product} />;
                   });
