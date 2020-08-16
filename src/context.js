@@ -36,8 +36,6 @@ class ProductProvider extends Component {
 
     let { data } = await getProductList();
 
-    console.log("data", data);
-
     data.forEach((item) => {
       const singleItem = { ...item };
       products = [...products, singleItem];
@@ -46,8 +44,6 @@ class ProductProvider extends Component {
     this.setState(() => {
       return { products };
     }, this.checkCartItems);
-
-    console.log("products", products);
   };
 
   getItem = (_id) => {
@@ -142,9 +138,7 @@ class ProductProvider extends Component {
           cartTotal: totals.total,
         };
       },
-      () => {
-        console.log(this.state);
-      }
+      () => {}
     );
   };
   removeItem = (_id) => {
