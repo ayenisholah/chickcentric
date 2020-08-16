@@ -1,9 +1,14 @@
 import axios from "axios";
 
 export const getProductList = async () => {
-  let { data } = await axios.get(
-    "https://lit-sands-58479.herokuapp.com/api/product"
-  );
+  let { data } = await axios.get("http://localhost:3000/api/product");
 
   return data;
+};
+
+export const parseCurrency = (amount) => {
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+  }).format(amount);
 };
