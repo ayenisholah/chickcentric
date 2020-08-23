@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/thechickcentric2.png";
+import logo from "../assets/logo.jpeg";
 
 export default function Navbar() {
   return (
@@ -14,7 +14,9 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="cart-icon">
-        <Link to="/cart"><i className="fas fa-cart-plus" /></Link>
+        <Link to="/cart">
+          <i className="fas fa-cart-plus" />
+        </Link>
       </div>
     </nav>
   );
