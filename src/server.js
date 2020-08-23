@@ -31,7 +31,7 @@ app.get('/', (_, res) =>
 app.post('/signup', signup)
 app.post('/signin', signin)
 
-app.use('/api/product', getManyRouter)
+app.use('/api/products', getManyRouter)
 
 app.use('/api', protect)
 app.use('/api/product', router)
