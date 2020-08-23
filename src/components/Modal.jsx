@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ProductConsumer } from "../context";
 import { ButtonContainer } from "./Button";
 import { Link } from "react-router-dom";
+import { parseCurrency } from "../helpers/utilities";
 export default class Modal extends Component {
   render() {
     return (
@@ -24,7 +25,9 @@ export default class Modal extends Component {
                       <h5>item added to cart</h5>
                       <img src={imageUrl} className="img-fluid" alt="" />
                       <h5>{title}</h5>
-                      <h5 className="text-muted">price : N{price}</h5>
+                      <h5 className="text-muted">
+                        price : {parseCurrency(price)}
+                      </h5>
                       <Link to="/">
                         <ButtonContainer
                           onClick={() => {
