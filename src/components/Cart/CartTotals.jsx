@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { PaystackButton } from "react-paystack";
+import { parseCurrency } from "../../helpers/utilities";
+
 export default class CartTotals extends Component {
   render() {
     const {
@@ -9,7 +12,7 @@ export default class CartTotals extends Component {
       cart,
       clearCart,
     } = this.props.value;
-    // const { history } = this.props;
+    const { paystackProps, delivery } = this.props;
     const emptyCart = cart.length === 0 ? true : false;
     return (
       <React.Fragment>
@@ -29,17 +32,25 @@ export default class CartTotals extends Component {
                   </button>
                 </Link>
                 <h5>
-                  <span className="text-title"> subtotal :</span>{" "}
-                  <strong>N {cartSubTotal} </strong>
+                  <span className="text-title"> subtotal :</span>
+                  <strong>{parseCurrency(cartSubTotal)}</strong>
                 </h5>
                 <h5>
-                  <span className="text-title"> vat :</span>{" "}
-                  <strong>N {cartTax} </strong>
+                  <span className="text-title"> vat :</span>
+                  <strong>{parseCurrency(cartTax)}</strong>
                 </h5>
                 <h5>
-                  <span className="text-title"> total :</span>{" "}
-                  <strong>N {cartTotal} </strong>
+                  <span className="text-title"> delivery :</span>
+                  <strong>{parseCurrency(delivery)}</strong>
                 </h5>
+                <h5>
+                  <span className="text-title"> total :</span>
+                  <strong> {parseCurrency(cartTotal + delivery)} </strong>
+                </h5>
+                <PaystackButton
+                  className="paystack-button text-center"
+                  {...paystackProps}
+                />
               </div>
             </div>
           </div>
