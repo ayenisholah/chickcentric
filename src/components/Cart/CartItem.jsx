@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { parseCurrency } from "../../helpers/utilities";
+
 export default class CartItem extends Component {
   render() {
     const { _id, title, imageUrl, price, total, count } = this.props.item;
@@ -22,7 +24,8 @@ export default class CartItem extends Component {
         </div>
         <div className="col-10 mx-auto col-lg-2 ">
           <strong>
-            <span className="d-lg-none">price :</span> N {price}
+            <span className="d-lg-none">price :</span>
+            {parseCurrency(price)}
           </strong>
         </div>
         <div className="col-10 mx-auto col-lg-2 my-2 my-lg-0 ">
@@ -55,7 +58,7 @@ export default class CartItem extends Component {
         </div>
 
         <div className="col-10 mx-auto col-lg-2 ">
-          <strong>item total : N{total} </strong>
+          <strong>item total : {parseCurrency(total)} </strong>
         </div>
       </div>
     );
