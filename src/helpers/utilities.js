@@ -1,7 +1,9 @@
 import axios from "axios";
 
 export const getProductList = async () => {
-  let { data } = await axios.get("http://localhost:3000/api/product");
+  let { data } = await axios.get(
+    `${process.env.REACT_APP_HOST_ENDPOINT}/api/product`
+  );
 
   return data;
 };
