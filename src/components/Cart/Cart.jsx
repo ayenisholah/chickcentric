@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { PaystackButton } from "react-paystack";
-
 import Title from "../Title";
 import CartColumns from "./CartColumns";
 import CartList from "./CartList";
 import CartTotals from "./CartTotals";
 import { ProductConsumer } from "../../context";
 import EmptyCart from "./EmptyCart";
+import { states } from "../../state";
+import { parseCurrency } from "../../helpers/utilities";
 
 export default class Store extends Component {
   state = {
@@ -26,25 +26,24 @@ export default class Store extends Component {
 
   render() {
     const { name, phone, email, address, city, state } = this.state;
+    const delivery = state === "FCT - Abuja" ? 500 : 2500;
+    const publicKey = process.env.REACT_APP_PAYSTACK_PUBLICKEY;
 
     return (
       <section className="cart">
         <ProductConsumer>
           {(value) => {
-            console.log("value", value);
-            const { cart, cartTotal } = value;
+            const { cart, cartTotal, cartSubTotal } = value;
             const paystackProps = {
               email,
-              amount: cartTotal * 100,
+              amount: (cartTotal + delivery) * 100,
               metadata: { name, phone },
-              publicKey: "pk_live_48b102f71299b0e91c6cc26a0145d28004e1041a",
+              publicKey: publicKey,
               text: "Pay Now",
               onSuccess: () =>
                 alert("Thanks for doing business with us! Come back soon!!"),
-              onClose: () => alert("Wait! You need this oil, don't go!!!!"),
+              onClose: () => alert("Something went wrong"),
             };
-
-            console.log("paystack props", paystackProps);
 
             if (cart.length > 0) {
               return (
@@ -52,9 +51,16 @@ export default class Store extends Component {
                   <Title name="your" title="cart" />
                   <CartColumns />
                   <CartList value={value} />
-                  <CartTotals value={value} history={this.props.history} />
+                  <h5 className="text-center my-2">
+                    <span>Subtotal: </span> {parseCurrency(cartSubTotal)}
+                  </h5>
                   <div>
-                    <h1 style={{ textAlign: "center" }}>Checkout</h1>
+                    <h3
+                      style={{ textAlign: "center", color: "#000" }}
+                      className="my-4"
+                    >
+                      Proceed To Checkout
+                    </h3>
                     <div className="container">
                       <div className="row px-3">
                         <form className="mx-auto">
@@ -121,19 +127,25 @@ export default class Store extends Component {
                                 onChange={this.handleChange}
                                 value={state}
                               >
-                                <option defaultValue>Choose...</option>
-                                <option>...</option>
+                                {states.map((state) => (
+                                  <option key={state} value={state}>
+                                    {state}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
-                          <PaystackButton
-                            className="paystack-button"
-                            {...paystackProps}
-                          />
                         </form>
                       </div>
                     </div>
                   </div>
+                  <CartTotals
+                    value={value}
+                    history={this.props.history}
+                    state={state}
+                    paystackProps={paystackProps}
+                    delivery={delivery}
+                  />
                 </React.Fragment>
               );
             } else {
