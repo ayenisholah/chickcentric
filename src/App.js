@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import Navbar from "./components/header/Navbar";
 import Landing from "./components/home/Landing";
+import Cart from "./components/Cart/Cart";
 import Footer from "./components/home/Footer";
+import Details from "./components/Details";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
-import Cart from "./components/Cart/Cart";
-import Details from "./components/Details";
-import Default from "./components/Default";
 
 class App extends Component {
   render() {
@@ -16,9 +15,9 @@ class App extends Component {
         <Navbar />
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/details" component={Details} />
+          <Route path="/details/:id" component={Details} />
           <Route path="/cart" component={Cart} />
-          <Route component={Default} />
+          <Route path="*" component={Landing} />
         </Switch>
         <Footer />
       </div>

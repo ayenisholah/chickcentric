@@ -6,6 +6,7 @@
   --mainDark: #000;
   --mainYellow: #ffa400;
   --mainPurple: #6a4c93;
+  --mainRed: #ff1000;
 }
 .text-title {
   font-family: "Roboto", sans-serif;
@@ -13,7 +14,7 @@
   text-transform: uppercase;
 }
 .text-blue {
-  color: var(--mainPurple);
+  color: var(--mainRed);
   font-size: 1rem;
   font-weight: bold;
 }
@@ -72,7 +73,7 @@
     cursor: pointer;
     a > i {
       font-size: 2rem;
-      color: var(--mainPurple);
+      color: var(--mainRed);
     }
   }
 }
@@ -216,7 +217,7 @@ h3 {
 // Footer
 
 .contact {
-  background-color: #eceefe;
+  background-color: #ffccbb;
   margin: 20px auto 0;
   text-align: center;
   padding: 20px 60px;
@@ -267,4 +268,22 @@ h3 {
       font-size: 1rem;
     }
   }
+}
+
+.paystack-button {
+  display: inline-block;
+  border: none;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #09a5db;
+  color: #fff;
+  border-radius: 5px;
 }

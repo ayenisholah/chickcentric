@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { ProductConsumer } from "../context";
+import { parseCurrency } from "../helpers/utilities";
+
 export default class Product extends Component {
   render() {
     const { _id, title, imageUrl, price, inCart } = this.props.product;
@@ -15,8 +17,13 @@ export default class Product extends Component {
                   className="img-container p-2"
                   onClick={() => value.handleDetail(_id)}
                 >
-                  <Link to="/details">
-                    <img src={imageUrl} alt="" className="card-img-top" />
+                  <Link to={`/details/${_id}`}>
+                    <img
+                      src={imageUrl}
+                      alt={title}
+                      className="card-img-top"
+                      style={{ height: "300px" }}
+                    />
                   </Link>
                   <button
                     className="cart-btn"
@@ -41,8 +48,7 @@ export default class Product extends Component {
           <div className="card-footer d-flex justify-content-between">
             <h4 className="align-self-center mb-0">{title}</h4>
             <h5 className="text-blue font-italic mb-0">
-              <span className="mr-1">N</span>
-              {price}
+              {parseCurrency(price)}
             </h5>
           </div>
         </div>
@@ -90,7 +96,7 @@ const ProductWrapper = styled.div`
     bottom: 0;
     right: 0;
     padding: 0.2rem 0.4rem;
-    background: var(--mainPurple);
+    background: var(--mainRed);
     border: none;
     color: var(--mainWhite);
     font-size: 1.4rem;

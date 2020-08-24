@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { ProductConsumer } from "../context";
 import { ButtonContainer } from "./Button";
 import { Link } from "react-router-dom";
+import { parseCurrency } from "../helpers/utilities";
+
 export default class Details extends Component {
   render() {
     return (
@@ -15,8 +17,6 @@ export default class Details extends Component {
             title,
             inCart,
           } = value.detailProduct;
-
-          console.log("value", value);
 
           return (
             <div className="container py-5">
@@ -38,10 +38,7 @@ export default class Details extends Component {
                     {/* made by : <span className="text-uppercase">{company}</span> */}
                   </h4>
                   <h4 className="text-blue">
-                    <strong>
-                      price : <span>N</span>
-                      {price}
-                    </strong>
+                    <strong>price :{parseCurrency(price)}</strong>
                   </h4>
                   <p className="text-capitalize font-weight-bold mt-3 mb-0">
                     some info about product :

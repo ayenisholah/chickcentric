@@ -1,54 +1,48 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Product from "./Product";
 import Title from "./Title";
 import styled from "styled-components";
 import { ProductConsumer } from "../context";
 export default class ProductList extends Component {
-  state = {
-    products: [],
-  };
-  componentDidMount() {
-    this.setProducts();
-  }
-
-  setProducts = async () => {
-    let products = [];
-
-    let { data } = await axios.get(
-      "https://lit-sands-58479.herokuapp.com/api/product",
-      {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMzMxNmRkOWFjMWZjMDAxN2IzYTgzNCIsImlhdCI6MTU5NzIzNTg3NCwiZXhwIjoxNjA1ODc1ODc0fQ.EcgTyioeNG7fOh2Q8DsNz3DhVw5RDFCSQeIVqQwO1ok",
-        },
-      }
-    );
-
-    data.data.forEach((item) => {
-      const singleItem = { ...item };
-      products = [...products, singleItem];
-    });
-
-    this.setState(() => {
-      return { products };
-    }, this.checkCartItems);
-
-    console.log("products", products);
-  };
-
   render() {
     return (
       <React.Fragment>
         <ProductWrapper className="py-5">
           <div className="container" style={{ fontWeight: "1.2rem" }}>
             <Title name="our" title="collections" />
-            <div className="row">
+            <div className="column">
               <ProductConsumer>
                 {(value) => {
-                  console.log(value.products);
-                  return value.products.map((product) => {
-                    return <Product key={product._id} product={product} />;
+                  let products = value.products;
+                  let categories = new Set();
+
+                  products.forEach((item) => categories.add(item.category));
+
+                  categories = Array.from(categories);
+
+                  return categories.map((item) => {
+                    return (
+                      <section key={item}>
+                        <h4
+                          className="text-left px-3"
+                          style={{ color: "#000" }}
+                        >
+                          {item.toUpperCase()}
+                        </h4>
+                        <div className="row">
+                          {products
+                            .filter((product) => {
+                              return product.category === item;
+                            })
+                            .map((product) => {
+                              return (
+                                <Product key={product._id} product={product} />
+                              );
+                            })}
+                        </div>
+                      </section>
+                    );
                   });
                 }}
               </ProductConsumer>
