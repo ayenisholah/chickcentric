@@ -6,7 +6,10 @@ import cors from 'cors'
 import config from './config'
 import { signup, signin, protect } from './utils/auth'
 import { connect } from './utils/db'
-import { getManyRouter, router } from './resources/product/product.router'
+import {
+  getAllProductsRouter,
+  productRouter,
+} from './resources/product/product.router'
 
 export const app = express()
 
@@ -31,10 +34,10 @@ app.get('/', (_, res) =>
 app.post('/signup', signup)
 app.post('/signin', signin)
 
-app.use('/api/products', getManyRouter)
+app.use('/api/products', getAllProductsRouter)
 
 app.use('/api', protect)
-app.use('/api/product', router)
+app.use('/api/products', productRouter)
 
 export const start = async () => {
   try {
