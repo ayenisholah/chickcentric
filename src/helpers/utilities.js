@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getProductList = async () => {
   let { data } = await axios.get(
-    `${process.env.REACT_APP_BACKEND_ENDPOINT}/api/product`
+    `${process.env.REACT_APP_BACKEND_ENDPOINT}/api/products`
   );
 
   return data;
