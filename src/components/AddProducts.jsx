@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { postProductRequest } from "./helpers/utilities";
 
 const { BlobServiceClient } = require("@azure/storage-blob");
 const blobSasUrl =
@@ -24,6 +24,7 @@ export default class AddProducts extends Component {
     price: 0,
     imageUrl: "",
     description: "",
+    category: "",
     inCart: false,
     count: 0,
     total: 0,
@@ -78,6 +79,7 @@ export default class AddProducts extends Component {
         selectedFile,
         title,
         description,
+        category,
         price,
         inCart,
         count,
@@ -89,7 +91,7 @@ export default class AddProducts extends Component {
         return;
       }
 
-      if (title.length === 0) {
+      if (title.trim().length === 0) {
         toast.error("Product Title Cannot be empty");
         return;
       }
@@ -99,8 +101,12 @@ export default class AddProducts extends Component {
         return;
       }
 
-      if (description.length === 0) {
+      if (description.trim().length === 0) {
         toast.error("Product description cannot be empty");
+        return;
+      }
+      if (category.trim().length === 0) {
+        toast.error("Product category cannot be empty");
         return;
       }
 
@@ -108,6 +114,7 @@ export default class AddProducts extends Component {
         imageUrl: `https://thechickcentric.blob.core.windows.net/products/${selectedFile.name}`,
         title,
         description,
+        category: category.toLowerCase(),
         price: Number(price),
         count,
         total,
@@ -120,14 +127,10 @@ export default class AddProducts extends Component {
         description.length !== 0 &&
         Number.isInteger(+price)
       ) {
-        const response = await axios.post(
-          "https://lit-sands-58479.herokuapp.com/api/product",
+        const response = await postProductRequest(
+          "api/products",
           product,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          token
         );
 
         if (response.status === 201) {
@@ -145,6 +148,7 @@ export default class AddProducts extends Component {
         price: 0,
         imageUrl: "",
         description: "",
+        category: "",
         inCart: false,
         count: 0,
         total: 0,
@@ -155,7 +159,7 @@ export default class AddProducts extends Component {
   };
 
   render() {
-    const { title, description, price } = this.state;
+    const { title, description, price, category } = this.state;
 
     if (token === null) {
       return <Redirect to="/" />;
@@ -177,6 +181,16 @@ export default class AddProducts extends Component {
               name="title"
               onChange={this.handleChange}
               value={title}
+            />
+          </div>
+
+          <div className="form-field">
+            <label>Category</label>
+            <input
+              type="text"
+              name="category"
+              onChange={this.handleChange}
+              value={category}
             />
           </div>
 
