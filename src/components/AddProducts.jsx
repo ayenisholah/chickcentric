@@ -5,9 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { postProductRequest } from "./helpers/utilities";
 
 const { BlobServiceClient } = require("@azure/storage-blob");
-const blobSasUrl =
-  "https://thechickcentric.blob.core.windows.net/?sv=2019-12-12&ss=bfqt&srt=co&sp=rwdlacupx&se=2021-08-09T18:36:34Z&st=2020-08-09T10:36:34Z&spr=https&sig=dasFpkYpCG87Zci0ZRiKaz35zL05KL2qIxU%2Bdsxg4BQ%3D";
-
+const blobSasUrl = process.env.REACT_APP_BLOB_SAS_URL;
 const blobServiceClient = new BlobServiceClient(blobSasUrl);
 
 const containerName = "products";
