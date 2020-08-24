@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loginRequest } from "../helpers/utilities";
 
 const KEY = "user-token";
 const token = localStorage.getItem(KEY);
@@ -44,10 +44,7 @@ class Login extends PureComponent {
           password,
         };
 
-        const response = await axios.post(
-          "https://lit-sands-58479.herokuapp.com/signin",
-          user
-        );
+        const response = await loginRequest("signin", user);
 
         if (response.status === 200) {
           toast.success("Login successful");
@@ -80,27 +77,29 @@ class Login extends PureComponent {
           pauseOnHover
         />
         <h3>Login</h3>
-        <form>
-          <div className="form-field">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              onChange={this.handleChange}
-              value={email}
-            />
-          </div>
-          <div className="form-field">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              onChange={this.handleChange}
-              value={password}
-            />
-          </div>
-          <button onClick={this.handleSubmit}>Login</button>
-        </form>
+        <div className="container">
+          <form>
+            <div className="form-field">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                onChange={this.handleChange}
+                value={email}
+              />
+            </div>
+            <div className="form-field">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                onChange={this.handleChange}
+                value={password}
+              />
+            </div>
+            <button onClick={this.handleSubmit}>Login</button>
+          </form>
+        </div>
       </div>
     );
   }
